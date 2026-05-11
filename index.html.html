@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Avaliação RH & Departamento Pessoal</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --green:#0F6E56;--green-light:#E1F5EE;--green-mid:#1D9E75;
+  --blue:#185FA5;--blue-light:#E6F1FB;
+  --purple:#534AB7;--purple-light:#EEEDFE;
+  --amber:#BA7517;--amber-light:#FAEEDA;
+  --red:#A32D2D;--red-light:#FCEBEB;
+  --gray:#444441;--gray-light:#F1EFE8;--gray-border:#D3D1C7;
+  --text:#2C2C2A;--text2:#5F5E5A;--text3:#888780;
+  --white:#fff;--surface:#F9F8F5;
+  --radius:10px;--radius-lg:16px;
+}
+body{font-family:'DM Sans',sans-serif;background:var(--surface);color:var(--text);min-height:100vh;}
+.wrapper{max-width:680px;margin:0 auto;padding:2rem 1.25rem 4rem;}
+
+/* Header */
+.header{text-align:center;padding:2rem 0 1.5rem;}
+.header-logo{display:inline-flex;align-items:center;gap:10px;margin-bottom:1.5rem;}
+.logo-dot{width:10px;height:10px;border-radius:50%;background:var(--green-mid);}
+.logo-text{font-size:13px;font-weight:500;color:var(--text3);letter-spacing:.06em;text-transform:uppercase;}
+.header h1{font-family:'DM Serif Display',serif;font-size:2rem;font-weight:400;color:var(--text);line-height:1.2;margin-bottom:.5rem;}
+.header p{font-size:15px;color:var(--text2);line-height:1.7;}
+
+/* Cards */
+.card{background:var(--white);border:1px solid var(--gray-border);border-radius:var(--radius-lg);padding:1.5rem;margin-bottom:1rem;}
+.card-sm{background:var(--white);border:1px solid var(--gray-border);border-radius:var(--radius);padding:1rem 1.25rem;margin-bottom:.75rem;}
+
+/* Progress */
+.prog-wrap{margin-bottom:1.5rem;}
+.prog-label{display:flex;justify-content:space-between;font-size:12px;color:var(--text3);margin-bottom:6px;}
+.prog-track{height:4px;background:var(--gray-light);border-radius:99px;}
+.prog-fill{height:100%;border-radius:99px;background:var(--green-mid);transition:width .4s ease;}
+
+/* Section badge */
+.badge{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:500;padding:5px 12px;border-radius:99px;margin-bottom:1.25rem;}
+.badge-green{background:var(--green-light);color:var(--green);}
+.badge-blue{background:var(--blue-light);color:var(--blue);}
+.badge-purple{background:var(--purple-light);color:var(--purple);}
+
+/* Form inputs */
+.field{margin-bottom:1.25rem;}
+.field label{display:block;font-size:13px;font-weight:500;color:var(--text2);margin-bottom:6px;}
+.field input{width:100%;padding:11px 14px;border:1px solid var(--gray-border);border-radius:var(--radius);font-family:'DM Sans',sans-serif;font-size:15px;color:var(--text);background:var(--white);transition:border-color .15s;}
+.field input:focus{outline:none;border-color:var(--green-mid);}
+.field input.error{border-color:var(--red);}
+.field-hint{font-size:12px;color:var(--red);margin-top:4px;display:none;}
+.field input.error+.field-hint{display:block;}
+
+/* Question */
+.q-num{font-size:12px;color:var(--text3);margin-bottom:.5rem;}
+.q-text{font-size:16px;color:var(--text);line-height:1.65;margin-bottom:1.1rem;}
+.opts{display:flex;flex-direction:column;gap:8px;}
+.opt{display:flex;align-items:flex-start;gap:10px;padding:11px 14px;border:1px solid var(--gray-border);border-radius:var(--radius);background:var(--white);cursor:pointer;font-size:14px;color:var(--text);text-align:left;transition:all .15s;line-height:1.5;}
+.opt:hover{background:var(--gray-light);border-color:#B4B2A9;}
+.opt.correct{background:#E1F5EE;border-color:var(--green-mid);color:var(--green);}
+.opt.wrong{background:var(--red-light);border-color:#E24B4A;color:var(--red);}
+.opt.selected{background:var(--blue-light);border-color:var(--blue);color:var(--blue);}
+.opt-letter{width:26px;height:26px;border-radius:50%;background:var(--gray-light);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;flex-shrink:0;margin-top:1px;}
+.explanation{font-size:13px;color:var(--text2);margin-top:12px;padding:12px;background:var(--gray-light);border-radius:var(--radius);line-height:1.65;border-left:3px solid var(--gray-border);}
+
+/* DISC grid */
+.disc-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.disc-opt{padding:12px 14px;border:1px solid var(--gray-border);border-radius:var(--radius);background:var(--white);cursor:pointer;font-size:13px;color:var(--text);text-align:left;transition:all .15s;line-height:1.5;}
+.disc-opt:hover{background:var(--gray-light);}
+.disc-opt.sel-D{background:#FAECE7;border-color:#D85A30;color:#4A1B0C;}
+.disc-opt.sel-I{background:var(--purple-light);border-color:#7F77DD;color:#26215C;}
+.disc-opt.sel-S{background:var(--green-light);border-color:var(--green-mid);color:#04342C;}
+.disc-opt.sel-C{background:var(--blue-light);border-color:var(--blue);color:#042C53;}
+
+/* Nav */
+.nav{display:flex;justify-content:space-between;align-items:center;margin-top:1.5rem;}
+.btn-primary{background:var(--green-mid);color:#fff;border:none;padding:11px 28px;border-radius:var(--radius);font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer;transition:opacity .15s;}
+.btn-primary:hover{opacity:.88;}
+.btn-primary:disabled{opacity:.4;cursor:not-allowed;}
+.btn-ghost{background:transparent;color:var(--text3);border:1px solid var(--gray-border);padding:11px 20px;border-radius:var(--radius);font-family:'DM Sans',sans-serif;font-size:14px;cursor:pointer;}
+.btn-ghost:hover{background:var(--gray-light);}
+.btn-full{width:100%;}
+
+/* Result */
+.disc-bar-wrap{margin:8px 0;}
+.disc-bar-row{display:flex;justify-content:space-between;font-size:13px;margin-bottom:5px;}
+.disc-track{height:8px;background:var(--gray-light);border-radius:99px;}
+.disc-fill{height:100%;border-radius:99px;transition:width .7s ease;}
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1rem;}
+.stat-box{background:var(--gray-light);border-radius:var(--radius);padding:.85rem 1rem;text-align:center;}
+.stat-n{font-size:26px;font-weight:500;}
+.stat-l{font-size:12px;color:var(--text3);margin-top:2px;}
+.profile-box{border-radius:var(--radius);padding:1rem 1.1rem;margin-top:1rem;}
+.module-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1.5rem;}
+.mod-card{background:var(--white);border:1px solid var(--gray-border);border-radius:var(--radius-lg);padding:1.1rem;}
+.mod-icon{font-size:22px;margin-bottom:.5rem;display:block;}
+.mod-title{font-size:14px;font-weight:500;color:var(--text);margin-bottom:4px;}
+.mod-desc{font-size:12px;color:var(--text2);line-height:1.55;}
+
+/* Screens */
+.screen{display:none;}
+.screen.active{display:block;}
+.fade-in{animation:fadeIn .3s ease;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+/* Print styles */
+@media print{
+  body{background:#fff;}
+  .btn-primary,.btn-ghost,.nav,.no-print{display:none!important;}
+}
+</style>
+</head>
+<body>
+<div class="wrapper">
+
+<!-- INTRO -->
+<div id="screen-intro" class="screen active fade-in">
+  <div class="header">
+    <div class="header-logo"><div class="logo-dot"></div><span class="logo-text">Avaliação de Candidatos</span></div>
+    <h1>RH & Departamento Pessoal</h1>
+    <p>Preencha seus dados e complete os dois módulos de avaliação.<br>O resultado é gerado automaticamente ao final.</p>
+  </div>
+
+  <div class="card">
+    <div class="badge badge-green">📋 Identificação do candidato</div>
+    <div class="field">
+      <label for="inp-nome">Nome completo</label>
+      <input type="text" id="inp-nome" placeholder="Digite seu nome completo" autocomplete="name">
+      <div class="field-hint">Preencha seu nome completo.</div>
+    </div>
+    <div class="field" style="margin-bottom:0">
+      <label for="inp-cpf">CPF</label>
+      <input type="text" id="inp-cpf" placeholder="000.000.000-00" maxlength="14" autocomplete="off">
+      <div class="field-hint">Digite um CPF válido no formato 000.000.000-00.</div>
+    </div>
+  </div>
+
+  <div class="module-row">
+    <div class="mod-card">
+      <span class="mod-icon">🧠</span>
+      <div class="mod-title">Psicotécnico</div>
+      <div class="mod-desc">10 questões de raciocínio lógico, numérico, verbal e conhecimento trabalhista. Feedback imediato em cada resposta.</div>
+    </div>
+    <div class="mod-card">
+      <span class="mod-icon">📊</span>
+      <div class="mod-title">DISC</div>
+      <div class="mod-desc">12 cenários comportamentais. Mapeia seu perfil dominante e adequação para vagas de RH e DP.</div>
+    </div>
+  </div>
+
+  <button class="btn-primary btn-full" onclick="startTest()">Iniciar avaliação →</button>
+</div>
+
+<!-- PSICOTÉCNICO -->
+<div id="screen-psico" class="screen">
+  <div class="badge badge-blue">🧠 Módulo 1 — Psicotécnico</div>
+  <div class="prog-wrap">
+    <div class="prog-label"><span id="psico-label">Questão 1 de 10</span><span id="psico-score-live">0 acertos</span></div>
+    <div class="prog-track"><div class="prog-fill" id="psico-prog" style="width:0%"></div></div>
+  </div>
+  <div id="psico-area" class="fade-in"></div>
+  <div class="nav">
+    <span style="font-size:13px;color:var(--text3)" id="psico-hint">Selecione uma opção para continuar</span>
+    <button class="btn-primary" id="psico-next" onclick="nextPsico()" disabled>Próxima →</button>
+  </div>
+</div>
+
+<!-- DISC -->
+<div id="screen-disc" class="screen">
+  <div class="badge badge-purple">📊 Módulo 2 — DISC</div>
+  <div class="prog-wrap">
+    <div class="prog-label"><span id="disc-label">Cenário 1 de 12</span><span></span></div>
+    <div class="prog-track"><div class="prog-fill" id="disc-prog" style="width:0%"></div></div>
+  </div>
+  <div id="disc-area" class="fade-in"></div>
+  <div class="nav">
+    <span style="font-size:13px;color:var(--text3)" id="disc-hint">Selecione a opção que mais se aproxima do seu comportamento</span>
+    <button class="btn-primary" id="disc-next" onclick="nextDisc()" disabled>Próxima →</button>
+  </div>
+</div>
+
+<!-- RESULTADO -->
+<div id="screen-result" class="screen fade-in">
+  <div class="header" style="padding-top:0">
+    <div class="header-logo"><div class="logo-dot"></div><span class="logo-text">Resultado</span></div>
+    <h1 style="font-size:1.6rem" id="res-nome-titulo">Resultado da Avaliação</h1>
+    <p id="res-data" style="font-size:13px;color:var(--text3);margin-top:4px;"></p>
+  </div>
+  <div id="res-content"></div>
+  <div style="margin-top:1.5rem;display:flex;gap:10px;flex-wrap:wrap;" class="no-print">
+    <button class="btn-ghost" onclick="window.print()">🖨️ Imprimir / Salvar PDF</button>
+    <button class="btn-primary" onclick="location.reload()">↺ Nova avaliação</button>
+  </div>
+</div>
+
+</div><!-- /wrapper -->
+
+<script>
+const psicoQs=[
+  {q:"Se uma empresa tem 240 funcionários e 30% trabalham em RH, quantos trabalham em outros departamentos?",opts:["62","72","168","192"],ans:2,exp:"30% de 240 = 72 funcionários em RH. 240 − 72 = 168 nos demais departamentos."},
+  {q:"Complete a série: 2, 4, 8, 16, __",opts:["24","30","32","36"],ans:2,exp:"A série multiplica por 2 a cada termo: 16 × 2 = 32."},
+  {q:"Folha de pagamento está para salário assim como contrato está para:",opts:["Férias","Rescisão","Vínculo empregatício","FGTS"],ans:2,exp:"A folha de pagamento formaliza o salário; o contrato formaliza o vínculo empregatício."},
+  {q:"Qual documento legal regulamenta o horário de trabalho no Brasil?",opts:["Código Civil","Constituição Federal e CLT","Lei 8.212/91","Lei 8.036/90"],ans:1,exp:"O horário de trabalho é regulamentado pela CLT (art. 58) e pela Constituição Federal (art. 7º, XIII)."},
+  {q:"Uma empresa paga R$ 3.000 de salário-base. Com encargos de ~70%, qual o custo total ao empregador?",opts:["R$ 3.000","R$ 3.900","R$ 5.100","R$ 6.200"],ans:2,exp:"R$ 3.000 × 1,70 = R$ 5.100 de custo total aproximado."},
+  {q:"Qual NÃO é competência do Departamento Pessoal?",opts:["Emissão de holerites","Registro de funcionários","Definição de estratégia de marketing","Cálculo de rescisão"],ans:2,exp:"Marketing é responsabilidade de outro setor. O DP cuida de holerites, registros e rescisões."},
+  {q:"João tem 45 anos e entrou na empresa há 1/5 de sua vida atual. Há quantos anos ele está na empresa?",opts:["5 anos","7 anos","9 anos","11 anos"],ans:2,exp:"45 ÷ 5 = 9 anos."},
+  {q:"CTPS está para o trabalhador assim como ___ está para o veículo.",opts:["CNH","Placa","CRV","Seguro"],ans:2,exp:"A CTPS é o documento de registro do trabalhador; o CRV é o documento de registro do veículo."},
+  {q:"Qual a sequência correta das etapas de admissão?",opts:["Entrevista → Contrato → Exame médico → Registro","Exame médico → Entrevista → Registro → Contrato","Registro → Exame médico → Contrato → Entrevista","Entrevista → Exame médico → Contrato → Registro"],ans:3,exp:"O fluxo correto é: entrevista → exame médico admissional → assinatura do contrato → registro em CTPS."},
+  {q:"O aviso prévio trabalhado no Brasil tem duração mínima de:",opts:["15 dias","30 dias","45 dias","60 dias"],ans:1,exp:"Conforme o art. 487 da CLT, o aviso prévio tem prazo mínimo de 30 dias, podendo ser proporcional ao tempo de serviço."}
+];
+
+const discScenarios=[
+  {q:"Diante de um conflito entre dois colegas, você prefere:",opts:[["Intervir com firmeza e resolver diretamente","D"],["Mediar com leveza e bom humor","I"],["Ouvir ambos com paciência e buscar consenso","S"],["Analisar os fatos antes de qualquer intervenção","C"]]},
+  {q:"Ao receber uma tarefa urgente, sua primeira reação é:",opts:[["Assumir o controle e agir imediatamente","D"],["Engajar a equipe e gerar entusiasmo","I"],["Verificar o impacto nos colegas e planejar junto","S"],["Levantar dados e criar um plano detalhado","C"]]},
+  {q:"Em reuniões, você geralmente:",opts:[["Lidera e vai direto ao ponto","D"],["Anima o grupo e propõe ideias criativas","I"],["Ouve com atenção e apoia as decisões","S"],["Faz perguntas precisas e registra detalhes","C"]]},
+  {q:"Ao identificar um processo de RH incorreto, você:",opts:[["Exige mudança imediata e apresenta solução","D"],["Conversa com todos para criar engajamento","I"],["Propõe ajustes graduais para não gerar instabilidade","S"],["Revisa a legislação e documenta a não-conformidade","C"]]},
+  {q:"Seu estilo de comunicação preferido é:",opts:[["Direto, objetivo e sem rodeios","D"],["Entusiasmado, expressivo e persuasivo","I"],["Calmo, acolhedor e diplomático","S"],["Preciso, estruturado e baseado em dados","C"]]},
+  {q:"Diante de uma meta ambiciosa de redução de turnover, você:",opts:[["Assume a responsabilidade e cria plano agressivo","D"],["Motiva a equipe com criatividade nas ações","I"],["Fortalece o relacionamento com os colaboradores","S"],["Analisa dados históricos e identifica causas-raiz","C"]]},
+  {q:"Ao tomar uma decisão importante em RH, você:",opts:[["Decide rápido com base na experiência","D"],["Consulta pessoas e valoriza o feeling do grupo","I"],["Prioriza consenso e cuida do impacto nas pessoas","S"],["Pesquisa exaustivamente antes de concluir","C"]]},
+  {q:"Em um processo seletivo, você valoriza mais candidatos:",opts:[["Determinados e proativos","D"],["Comunicativos e com boa energia","I"],["Estáveis, leais e colaborativos","S"],["Metódicos e com alto rigor técnico","C"]]},
+  {q:"Ao receber críticas ao seu trabalho, você:",opts:[["Debate com firmeza se discordar","D"],["Transforma a crítica em algo construtivo","I"],["Acolhe e reflete com cuidado antes de reagir","S"],["Verifica se a crítica tem embasamento lógico","C"]]},
+  {q:"No dia a dia do Departamento Pessoal, você se destaca por:",opts:[["Cumprir prazos com agilidade e decisão","D"],["Criar bom clima e relacionamento com funcionários","I"],["Manter rotinas estáveis e apoiar a equipe","S"],["Garantir conformidade legal e precisão nos cálculos","C"]]},
+  {q:"Diante de mudança de legislação trabalhista, sua postura é:",opts:[["Implementar logo e adaptar o que for preciso","D"],["Comunicar de forma engajante para todos","I"],["Avaliar impacto nas pessoas e fazer transição cuidadosa","S"],["Estudar detalhadamente antes de qualquer ação","C"]]},
+  {q:"O que mais te motiva no trabalho?",opts:[["Autonomia, desafios e resultados concretos","D"],["Reconhecimento, pessoas e ambiente dinâmico","I"],["Estabilidade, harmonia e trabalho em equipe","S"],["Qualidade, precisão e domínio técnico","C"]]}
+];
+
+let pIdx=0,dIdx=0,pScore=0,pAns=[],dScore={D:0,I:0,S:0,C:0},pSel=null,dSel=null;
+let candidatoNome='',candidatoCPF='';
+
+function maskCPF(v){
+  v=v.replace(/\D/g,'').slice(0,11);
+  if(v.length>9) v=v.replace(/(\d{3})(\d{3})(\d{3})(\d{1,2})/,'$1.$2.$3-$4');
+  else if(v.length>6) v=v.replace(/(\d{3})(\d{3})(\d{1,3})/,'$1.$2.$3');
+  else if(v.length>3) v=v.replace(/(\d{3})(\d{1,3})/,'$1.$2');
+  return v;
+}
+document.getElementById('inp-cpf').addEventListener('input',function(){this.value=maskCPF(this.value);});
+
+function validCPF(s){
+  s=s.replace(/\D/g,'');
+  if(s.length!==11||/^(\d)\1+$/.test(s)) return false;
+  let sum=0;
+  for(let i=0;i<9;i++) sum+=+s[i]*(10-i);
+  let r=11-(sum%11); if(r>=10) r=0;
+  if(r!==+s[9]) return false;
+  sum=0;
+  for(let i=0;i<10;i++) sum+=+s[i]*(11-i);
+  r=11-(sum%11); if(r>=10) r=0;
+  return r===+s[10];
+}
+
+function startTest(){
+  const nomeEl=document.getElementById('inp-nome');
+  const cpfEl=document.getElementById('inp-cpf');
+  let ok=true;
+  nomeEl.classList.remove('error'); cpfEl.classList.remove('error');
+  if(!nomeEl.value.trim()||nomeEl.value.trim().split(' ').length<2){nomeEl.classList.add('error');ok=false;}
+  if(!validCPF(cpfEl.value)){cpfEl.classList.add('error');ok=false;}
+  if(!ok) return;
+  candidatoNome=nomeEl.value.trim();
+  candidatoCPF=cpfEl.value.trim();
+  show('screen-psico');
+  renderPsico();
+}
+
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');}
+
+function renderPsico(){
+  const q=psicoQs[pIdx];
+  document.getElementById('psico-label').textContent=`Questão ${pIdx+1} de ${psicoQs.length}`;
+  document.getElementById('psico-score-live').textContent=`${pScore} acertos`;
+  document.getElementById('psico-prog').style.width=`${(pIdx/psicoQs.length)*100}%`;
+  pSel=null;
+  document.getElementById('psico-next').disabled=true;
+  document.getElementById('psico-hint').textContent='Selecione uma opção para continuar';
+  const L=['A','B','C','D'];
+  document.getElementById('psico-area').innerHTML=`<div class="card">
+    <div class="q-num">Questão ${pIdx+1}</div>
+    <div class="q-text">${q.q}</div>
+    <div class="opts">${q.opts.map((o,i)=>`<button class="opt" id="po${i}" onclick="selPsico(${i})">
+      <span class="opt-letter">${L[i]}</span>${o}</button>`).join('')}
+    </div>
+    <div class="explanation" id="pexp" style="display:none"></div>
+  </div>`;
+}
+
+function selPsico(i){
+  if(pSel!==null) return;
+  pSel=i;
+  const q=psicoQs[pIdx];
+  document.querySelectorAll('.opt').forEach((b,idx)=>{
+    if(idx===q.ans) b.classList.add('correct');
+    else if(idx===i&&i!==q.ans) b.classList.add('wrong');
+  });
+  const ex=document.getElementById('pexp');
+  ex.textContent=q.exp; ex.style.display='block';
+  if(i===q.ans){pScore++; document.getElementById('psico-score-live').textContent=`${pScore} acertos`;}
+  pAns.push(i===q.ans);
+  document.getElementById('psico-next').disabled=false;
+  document.getElementById('psico-hint').textContent='';
+}
+
+function nextPsico(){
+  pIdx++;
+  if(pIdx<psicoQs.length) renderPsico();
+  else{show('screen-disc');renderDisc();}
+}
+
+function renderDisc(){
+  const q=discScenarios[dIdx];
+  document.getElementById('disc-label').textContent=`Cenário ${dIdx+1} de ${discScenarios.length}`;
+  document.getElementById('disc-prog').style.width=`${(dIdx/discScenarios.length)*100}%`;
+  dSel=null;
+  document.getElementById('disc-next').disabled=true;
+  document.getElementById('disc-area').innerHTML=`<div class="card">
+    <div class="q-num">Cenário ${dIdx+1}</div>
+    <div class="q-text">${q.q}</div>
+    <div class="disc-grid">${q.opts.map((o,i)=>`<button class="disc-opt" id="do${i}" onclick="selDisc(${i},'${o[1]}')">${o[0]}</button>`).join('')}
+    </div>
+  </div>`;
+}
+
+function selDisc(i,t){
+  if(dSel!==null) return;
+  dSel=t; dScore[t]++;
+  document.getElementById(`do${i}`).classList.add(`sel-${t}`);
+  document.getElementById('disc-next').disabled=false;
+}
+
+function nextDisc(){
+  dIdx++;
+  if(dIdx<discScenarios.length) renderDisc();
+  else showResult();
+}
+
+function showResult(){
+  show('screen-result');
+  const now=new Date();
+  const dt=now.toLocaleDateString('pt-BR',{day:'2-digit',month:'long',year:'numeric'})+' às '+now.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+  document.getElementById('res-nome-titulo').textContent=candidatoNome;
+  document.getElementById('res-data').textContent=`CPF: ${candidatoCPF} · Realizado em ${dt}`;
+
+  const total=psicoQs.length;
+  const pct=Math.round((pScore/total)*100);
+  const perf=pct>=80?{l:'Excelente',c:'#0F6E56',bg:'#E1F5EE'}:pct>=60?{l:'Bom',c:'#185FA5',bg:'#E6F1FB'}:{l:'A desenvolver',c:'#BA7517',bg:'#FAEEDA'};
+
+  const dTotal=Object.values(dScore).reduce((a,b)=>a+b,0);
+  const dP={};['D','I','S','C'].forEach(k=>dP[k]=Math.round((dScore[k]/dTotal)*100));
+  const dom=Object.entries(dScore).sort((a,b)=>b[1]-a[1])[0][0];
+
+  const profiles={
+    D:{name:'Dominância',desc:'Decisivo, orientado a resultados e gosta de assumir o controle. Destaca-se em liderança de processos seletivos, gestão de performance e situações de crise em RH.',c:'#D85A30',bg:'#FAECE7'},
+    I:{name:'Influência',desc:'Comunicativo, entusiasta e constrói relacionamentos com facilidade. Brilha no employer branding, onboarding, clima organizacional e comunicação interna.',c:'#534AB7',bg:'#EEEDFE'},
+    S:{name:'Estabilidade',desc:'Paciente, leal e prioriza o bem-estar das pessoas. Referência em rotinas trabalhistas, atendimento ao colaborador e manutenção de processos no DP.',c:'#3B6D11',bg:'#EAF3DE'},
+    C:{name:'Conformidade',desc:'Analítico, preciso e orientado a dados e normas. Excelente em cálculos de folha, conformidade legal, auditoria e documentação no DP.',c:'#185FA5',bg:'#E6F1FB'}
+  };
+  const dColors={D:'#D85A30',I:'#534AB7',S:'#3B6D11',C:'#185FA5'};
+  const p=profiles[dom];
+
+  const adq=pct>=70?'✅ Desempenho psicotécnico satisfatório para funções analíticas de RH/DP.':'⚠️ Recomenda-se revisão de conceitos de legislação trabalhista e raciocínio numérico.';
+  const discFit=(dom==='C'||dom==='S')?'compatível com atividades de Departamento Pessoal, que exigem precisão e estabilidade.':'compatível com atividades de Gestão de Pessoas e Recrutamento, que exigem comunicação e influência.';
+
+  document.getElementById('res-content').innerHTML=`
+  <div class="card">
+    <div class="badge badge-blue">🧠 Módulo 1 — Psicotécnico</div>
+    <div class="stat-grid">
+      <div class="stat-box"><div class="stat-n">${pScore}/${total}</div><div class="stat-l">acertos</div></div>
+      <div class="stat-box"><div class="stat-n" style="color:${perf.c}">${pct}%</div><div class="stat-l">${perf.l}</div></div>
+    </div>
+    <div class="prog-track" style="margin-bottom:.5rem"><div class="prog-fill" style="width:${pct}%;background:${perf.c}"></div></div>
+    <div style="font-size:12px;color:var(--text3)">${pAns.filter(Boolean).length} corretas · ${pAns.filter(x=>!x).length} incorretas</div>
+  </div>
+
+  <div class="card">
+    <div class="badge badge-purple">📊 Módulo 2 — Perfil DISC</div>
+    ${['D','I','S','C'].map(k=>`<div class="disc-bar-wrap">
+      <div class="disc-bar-row">
+        <span style="font-size:13px;font-weight:${k===dom?'600':'400'};color:var(--text)">${profiles[k].name} (${k})</span>
+        <span style="font-size:13px;color:var(--text3)">${dP[k]}%</span>
+      </div>
+      <div class="disc-track"><div class="disc-fill" style="width:${dP[k]}%;background:${dColors[k]}"></div></div>
+    </div>`).join('')}
+    <div class="profile-box" style="background:${p.bg};border-left:3px solid ${p.c}">
+      <div style="font-size:14px;font-weight:600;color:${p.c};margin-bottom:6px">Perfil dominante: ${p.name} (${dom})</div>
+      <div style="font-size:13px;color:var(--text);line-height:1.65">${p.desc}</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="badge badge-green">📋 Parecer para o recrutador</div>
+    <div style="background:var(--gray-light);border-radius:var(--radius);padding:1rem;font-size:13px;color:var(--text);line-height:1.75">
+      <strong>${candidatoNome}</strong> (CPF: ${candidatoCPF}) concluiu a avaliação em ${dt}.<br><br>
+      ${adq}<br>
+      O perfil comportamental <strong>${dom} — ${p.name}</strong> é ${discFit}
+      <br><br>
+      <strong>Pontuação psicotécnica:</strong> ${pScore}/${total} (${pct}%) · Nível: ${perf.l}<br>
+      <strong>Perfil DISC:</strong> D=${dP.D}% | I=${dP.I}% | S=${dP.S}% | C=${dP.C}%
+    </div>
+  </div>`;
+}
+</script>
+</body>
+</html>
